@@ -1,0 +1,31 @@
+# Railway / Nixpacks build configuration.
+#
+# PyMuPDF, ReportLab, and python-pptx ship self-contained wheels, and Open Sans is bundled
+# in assets/fonts, so no system fonts or libraries are required.
+#
+# OCR: rapidocr-onnxruntime depends on opencv-python, which needs libGL (absent here).
+# The install step swaps in opencv-python-headless, which provides the same cv2 module
+# without GUI libraries, so OCR works on the server.
+#
+# LibreOffice is needed ONLY for legacy .ppt uploads (PDF and PPTX work without it). It
+# adds roughly 500 MB to the image and minutes to the build, so it is opt-in: uncomment
+# the line below to accept .ppt files.
+
+[phases.setup]
+nixPkgs = [
+  "python312",
+  # "libreoffice-fresh",   # uncomment to accept legacy .ppt uploads
+]
+
+[phases.install]
+cmds = [
+  "python -m venv /opt/venv && . /opt/venv/bin/activate && pip install --no-cache-dir -r requirements.txt && pip uninstall -y opencv-python && pip install --no-cache-dir opencv-python-headless",
+]
+
+[start]
+cmd = "streamlit run app.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true --server.fileWatcherType=none --browser.gatherUsageStats=false"
+
+[variables]
+PYTHONUNBUFFERED = "1"
+PYTHONDONTWRITEBYTECODE = "1"
+PIP_DISABLE_PIP_VERSION_CHECK = "1"

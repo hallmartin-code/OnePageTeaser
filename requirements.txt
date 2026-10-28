@@ -1,0 +1,19 @@
+# Core
+streamlit>=1.45
+pymupdf>=1.24
+python-pptx>=1.0
+reportlab>=4.0
+pydantic>=2.7
+python-dotenv>=1.0
+rapidfuzz>=3.0
+pillow>=10.0
+python-docx>=1.1
+
+# LLM providers (Anthropic is the default; openai is only needed for TEASER_LLM_PROVIDER=openai)
+anthropic>=0.125
+openai>=1.40
+
+# Optional OCR for scanned PDFs and image-only slides (pure Python wheels, no system binaries)
+rapidocr-onnxruntime>=1.2
+numpy>=1.26
+

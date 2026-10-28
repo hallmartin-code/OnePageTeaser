@@ -1,0 +1,432 @@
+{
+ "company_name": {
+  "value": "Halcyon Therapeutics",
+  "pages": [
+   1
+  ],
+  "quote": "Halcyon Therapeutics"
+ },
+ "tagline": {
+  "value": "Oral medicines that restore the gut barrier",
+  "pages": [
+   1
+  ],
+  "quote": "Oral medicines that restore the gut barrier"
+ },
+ "website": {
+  "value": "www.halcyon-tx.example",
+  "pages": [
+   1
+  ],
+  "quote": "www.halcyon-tx.example"
+ },
+ "industry": "biotech",
+ "section_headings": [
+  {
+   "section": "problem_market",
+   "heading": "The Unmet Need"
+  },
+  {
+   "section": "solution_technology",
+   "heading": "Science & Approach"
+  },
+  {
+   "section": "pipeline_product",
+   "heading": "Pipeline"
+  },
+  {
+   "section": "market_size",
+   "heading": "Market Opportunity"
+  },
+  {
+   "section": "traction",
+   "heading": "Key Milestones"
+  },
+  {
+   "section": "team",
+   "heading": "Leadership"
+  },
+  {
+   "section": "funding",
+   "heading": "Series A Financing"
+  }
+ ],
+ "items": [
+  {
+   "section": "problem_market",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "Inflammatory bowel disease (IBD) affects 6.8 million people worldwide, and annual direct costs of IBD care exceed $25 billion in the US.",
+   "pages": [
+    2
+   ],
+   "quotes": [
+    "Inflammatory bowel disease (IBD) affects 6.8 million people worldwide.",
+    "Annual direct costs of IBD care exceed $25 billion in the US."
+   ]
+  },
+  {
+   "section": "problem_market",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "Up to 40% of patients lose response to biologic therapy within the first year, and no approved therapy directly repairs the damaged intestinal barrier.",
+   "pages": [
+    2
+   ],
+   "quotes": [
+    "Up to 40% of patients lose response to biologic therapy within the first year.",
+    "No approved therapy directly repairs the damaged intestinal barrier."
+   ]
+  },
+  {
+   "section": "problem_market",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "Barrier damage persists in many patients in clinical remission and predicts relapse, leaving a root cause of disease unaddressed.",
+   "pages": [
+    2
+   ],
+   "quotes": [
+    "Barrier damage persists in many patients in clinical remission and predicts relapse."
+   ]
+  },
+  {
+   "section": "solution_technology",
+   "role": "general",
+   "claim_type": "descriptive",
+   "text": "HT-101 is an oral, gut-restricted small molecule designed to restore tight-junction integrity, targeting the epithelial barrier rather than suppressing the immune system.",
+   "pages": [
+    3
+   ],
+   "quotes": [
+    "HT-101 is an oral, gut-restricted small molecule that restores tight-junction integrity.",
+    "Platform targets the epithelial barrier rather than suppressing the immune system."
+   ]
+  },
+  {
+   "section": "solution_technology",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "Designed as a once-daily oral tablet for use alone or alongside existing biologics; minimal systemic exposure has been observed in preclinical models.",
+   "pages": [
+    3
+   ],
+   "quotes": [
+    "Designed as a once-daily oral tablet for use alone or alongside existing biologics.",
+    "Minimal systemic exposure observed in preclinical models."
+   ]
+  },
+  {
+   "section": "solution_technology",
+   "role": "general",
+   "claim_type": "descriptive",
+   "sensitive_category": "proprietary_technical",
+   "text": "Lead compound chemical structure as disclosed in the deck.",
+   "pages": [
+    3
+   ],
+   "quotes": [
+    "Lead compound structure:"
+   ]
+  },
+  {
+   "section": "pipeline_product",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "HT-101 (ulcerative colitis): IND-enabling.",
+   "pages": [
+    4
+   ],
+   "quotes": [
+    "HT-101",
+    "Ulcerative colitis",
+    "IND-enabling"
+   ]
+  },
+  {
+   "section": "pipeline_product",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "HT-102 (Crohn's disease): lead optimization. HT-201 (celiac disease): discovery.",
+   "pages": [
+    4
+   ],
+   "quotes": [
+    "HT-102",
+    "Lead optimization",
+    "HT-201",
+    "Discovery"
+   ]
+  },
+  {
+   "section": "pipeline_product",
+   "role": "general",
+   "claim_type": "planned",
+   "text": "IND submission for HT-101 is planned for Q3 2026, with a Phase 1 trial expected to begin in Q1 2027.",
+   "pages": [
+    4
+   ],
+   "quotes": [
+    "IND submission for HT-101 planned for Q3 2026.",
+    "Phase 1 trial of HT-101 expected to begin in Q1 2027."
+   ]
+  },
+  {
+   "section": "market_size",
+   "role": "tam",
+   "claim_type": "actual",
+   "text": "TAM: $22.4B global IBD therapeutics market (2025).",
+   "pages": [
+    5
+   ],
+   "quotes": [
+    "TAM: $22.4B global IBD therapeutics market (2025)."
+   ]
+  },
+  {
+   "section": "market_size",
+   "role": "sam",
+   "claim_type": "actual",
+   "text": "SAM: $6.1B in moderate-to-severe ulcerative colitis, US and EU5.",
+   "pages": [
+    5
+   ],
+   "quotes": [
+    "SAM: $6.1B moderate-to-severe ulcerative colitis, US and EU5."
+   ]
+  },
+  {
+   "section": "market_size",
+   "role": "som",
+   "claim_type": "forecast",
+   "text": "SOM: $610M projected peak annual sales at a 10% share of SAM.",
+   "pages": [
+    5
+   ],
+   "quotes": [
+    "SOM: $610M projected peak annual sales at 10% share of SAM."
+   ]
+  },
+  {
+   "section": "traction",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "Completed GLP toxicology studies in two species.",
+   "pages": [
+    6
+   ],
+   "quotes": [
+    "Completed GLP toxicology studies in two species."
+   ]
+  },
+  {
+   "section": "traction",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "62% reduction in intestinal permeability in a DSS mouse model (n=24).",
+   "pages": [
+    6
+   ],
+   "quotes": [
+    "62% reduction in intestinal permeability in a DSS mouse model (n=24)."
+   ]
+  },
+  {
+   "section": "traction",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "Awarded a $3.2M NIH SBIR Phase II grant in 2024.",
+   "pages": [
+    6
+   ],
+   "quotes": [
+    "$3.2M NIH SBIR Phase II grant awarded in 2024."
+   ]
+  },
+  {
+   "section": "traction",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "Selected a GMP drug substance manufacturing partner.",
+   "pages": [
+    6
+   ],
+   "quotes": [
+    "GMP drug substance manufacturing partner selected."
+   ]
+  },
+  {
+   "section": "traction",
+   "role": "general",
+   "claim_type": "actual",
+   "sensitive_category": "customer_identity",
+   "text": "LOI signed with a clinical site network partner for a Phase 1b study.",
+   "pages": [
+    6
+   ],
+   "quotes": [
+    "LOI signed with Midwest GI Partners for a Phase 1b site network."
+   ]
+  },
+  {
+   "section": "traction",
+   "role": "general",
+   "claim_type": "descriptive",
+   "sensitive_category": "undisclosed_negotiation",
+   "text": "Partnership discussions are under way with large pharmaceutical companies.",
+   "pages": [
+    6
+   ],
+   "quotes": [
+    "In discussions with two top-10 pharma companies regarding partnership."
+   ]
+  },
+  {
+   "section": "traction",
+   "role": "general",
+   "claim_type": "actual",
+   "text": "Composition-of-matter patent granted in the US, expiring 2041.",
+   "pages": [
+    7
+   ],
+   "quotes": [
+    "Composition-of-matter patent granted in the US, expiring 2041."
+   ]
+  },
+  {
+   "section": "team",
+   "role": "team_member",
+   "claim_type": "actual",
+   "text": "Dr. Maya Okafor, CEO - former VP Clinical Development at Arcadia Pharma; 15 years in GI drug development.",
+   "pages": [
+    8
+   ],
+   "quotes": [
+    "Dr. Maya Okafor, CEO - former VP Clinical Development at Arcadia Pharma; 15 years in GI drug development."
+   ]
+  },
+  {
+   "section": "team",
+   "role": "team_member",
+   "claim_type": "actual",
+   "text": "Dr. Daniel Reyes, CSO - inventor of the barrier-restoration platform; PhD, Stanford University.",
+   "pages": [
+    8
+   ],
+   "quotes": [
+    "Dr. Daniel Reyes, CSO - inventor of the barrier-restoration platform; PhD, Stanford University."
+   ]
+  },
+  {
+   "section": "team",
+   "role": "team_member",
+   "claim_type": "actual",
+   "text": "Priya Natarajan, CFO - former biotech investment banker; led 2 IPOs.",
+   "pages": [
+    8
+   ],
+   "quotes": [
+    "Priya Natarajan, CFO - former biotech investment banker; led 2 IPOs."
+   ]
+  },
+  {
+   "section": "team",
+   "role": "team_member",
+   "claim_type": "actual",
+   "text": "Dr. Samuel Ortiz, CMO - gastroenterologist; led 4 Phase 2 IBD trials.",
+   "pages": [
+    8
+   ],
+   "quotes": [
+    "Dr. Samuel Ortiz, CMO - gastroenterologist; led 4 Phase 2 IBD trials."
+   ]
+  },
+  {
+   "section": "funding",
+   "role": "funding_ask",
+   "claim_type": "actual",
+   "text": "Raising a $15M Series A, providing 24 months of runway through Phase 1 data readout.",
+   "pages": [
+    9
+   ],
+   "quotes": [
+    "Raising a $15M Series A.",
+    "Runway: 24 months, through Phase 1 data readout."
+   ]
+  },
+  {
+   "section": "funding",
+   "role": "use_of_funds",
+   "claim_type": "planned",
+   "text": "Use of funds: 55% IND-enabling studies and Phase 1 trial; 25% CMC and manufacturing scale-up; 20% team and operations.",
+   "pages": [
+    9
+   ],
+   "quotes": [
+    "Use of funds: 55% IND-enabling studies and Phase 1 trial; 25% CMC and manufacturing scale-up; 20% team and operations."
+   ]
+  },
+  {
+   "section": "funding",
+   "role": "committed_capital",
+   "claim_type": "actual",
+   "sensitive_category": "committed_capital",
+   "text": "Part of the round has been committed by existing investors.",
+   "pages": [
+    9
+   ],
+   "quotes": [
+    "$6.5M committed, led by Northwind Ventures with participation from Bluefin Capital."
+   ]
+  }
+ ],
+ "concerns": [
+  {
+   "kind": "confidentiality",
+   "category": "investor_identity",
+   "pages": [
+    9
+   ],
+   "description": "Investor identities appear on the financing slide."
+  },
+  {
+   "kind": "confidentiality",
+   "category": "deal_terms",
+   "pages": [
+    9
+   ],
+   "description": "A valuation figure appears on the financing slide."
+  },
+  {
+   "kind": "confidentiality",
+   "category": "ip_strategy",
+   "pages": [
+    7
+   ],
+   "description": "An unpublished patent application is referenced."
+  },
+  {
+   "kind": "confidentiality",
+   "category": "contact_details",
+   "pages": [
+    8
+   ],
+   "description": "Personal contact details appear on the team slide."
+  },
+  {
+   "kind": "conflict",
+   "pages": [
+    5,
+    10
+   ],
+   "description": "The TAM figure on the highlights slide differs from the market slide."
+  },
+  {
+   "kind": "embedded_instruction",
+   "pages": [
+    10
+   ],
+   "description": "The highlights slide contains text addressed to AI systems; it was ignored."
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+[browser]
+gatherUsageStats = false
+
+[client]
+# Hide Streamlit's developer menu and Deploy button from end users.
+toolbarMode = "viewer"
+
+[server]
+maxUploadSize = 100
+# Serve static/ (favicon) at /app/static/.
+enableStaticServing = true
+
+# TEN Capital "Deck Analyzer" design: navy surfaces, coral primary, amber/teal accents.
+# Custom CSS for the hero card, gradient button, and glow lives in teaser/ui.py.
+[theme]
+base = "dark"
+primaryColor = "#EE5A4E"
+backgroundColor = "#0B1526"
+secondaryBackgroundColor = "#16283F"
+textColor = "#F3F6FA"
+linkColor = "#35BEBB"
+borderColor = "#1E354F"
+showWidgetBorder = true
+baseRadius = "10px"
+buttonRadius = "12px"
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap, sans-serif"
+headingFont = "Sora:https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap, sans-serif"
+codeFont = "JetBrains Mono:https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap, monospace"
+headingFontWeights = [700, 700, 600, 600, 600, 600]
+
+[theme.sidebar]
+backgroundColor = "#101E33"
+secondaryBackgroundColor = "#16283F"
+borderColor = "#1E354F"

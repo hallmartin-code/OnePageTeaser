@@ -1,0 +1,146 @@
+{
+  "template_id": "one_page_investor_teaser",
+  "version": "1.0",
+  "description": "General structure for a one-page investor teaser generated from a pitch deck. Contains structure and field rules only; no company data.",
+
+  "page": {
+    "size": "US Letter",
+    "orientation": "portrait",
+    "max_pages": 1,
+    "margins_in": {"left": 0.6, "right": 0.6, "top": 0.5, "bottom": 0.45},
+    "body_columns": 2,
+    "column_gutter_in": 0.3,
+    "column_balancing": "Sections kept whole, assigned to columns in reading order at the split that best balances column heights.",
+    "overflow_policy": "Never clip, truncate, or spill to a second page. If content does not fit at the minimum body size, refuse export and request edits."
+  },
+
+  "typography": {
+    "font_family": "Open Sans",
+    "fallback_font": "Helvetica",
+    "body_pt": {"max": 10.5, "min": 9.0, "step": 0.5},
+    "line_height": 1.32,
+    "section_heading_pt": "body + 0.5, bold, primary colour",
+    "company_name_pt": {"max": 22.0, "min": 16.0},
+    "tagline_pt": 11.0,
+    "website_pt": 10.0,
+    "disclaimer_pt": 9.0,
+    "footer_pt": 7.0
+  },
+
+  "content_length": {"target_words": {"min": 350, "max": 500}, "item_words": {"min": 8, "max": 30}},
+
+  "colors": {
+    "primary": "Brand colour when reliably identified (theme or cover), darkened to at least 5:1 contrast on white",
+    "fallback_primary": "#1F3A5F",
+    "fallback_accent": "#4A6F94",
+    "body_text": "#1E2329",
+    "muted_text": "#555C66"
+  },
+
+  "header": {
+    "elements": ["top_brand_bar", "logo", "company_name", "website", "tagline", "rule"],
+    "fields": [
+      {"key": "company_name", "label": "Company name", "required": true, "source": "verbatim from deck", "placement": "header, left, bold, primary colour"},
+      {"key": "tagline", "label": "Tagline", "required": false, "source": "verbatim from deck; never invented", "placement": "below name, italic, muted"},
+      {"key": "website", "label": "Website", "required": false, "source": "verbatim from deck; never invented", "placement": "right of name; own line below tagline if the name is too long"}
+    ],
+    "logo": {"default_included": false, "rule": "Only when available and cleared for reuse; chosen or uploaded by the user."}
+  },
+
+  "sections": [
+    {
+      "key": "problem_market",
+      "default_heading": "Problem & Opportunity",
+      "purpose": "the problem and high-level market statistics",
+      "content": ["Problem statement", "Who is affected and at what scale", "Cost or impact of the problem", "Why current solutions fall short"],
+      "item_roles": ["general"],
+      "format": "bullets (paragraph when a single item)"
+    },
+    {
+      "key": "solution_technology",
+      "default_heading": "Solution & Technology",
+      "purpose": "the solution and technology overview",
+      "content": ["What the product or technology is", "How it works at a high level", "Key differentiators", "Validation status (stated as in the deck)"],
+      "item_roles": ["general"],
+      "format": "bullets (paragraph when a single item)"
+    },
+    {
+      "key": "pipeline_product",
+      "default_heading": "Product Pipeline",
+      "purpose": "the product or asset pipeline",
+      "content": ["Product or asset name", "Indication, use case, or market", "Development stage", "Next planned milestone (labelled as planned)"],
+      "item_roles": ["general"],
+      "format": "one bullet per product/asset: Name (indication/use): stage"
+    },
+    {
+      "key": "market_size",
+      "default_heading": "Market Size",
+      "purpose": "TAM / SAM / SOM figures",
+      "content": ["TAM with scope and year", "SAM with scope", "SOM with basis (forecast wording preserved)"],
+      "item_roles": ["tam", "sam", "som", "general"],
+      "format": "one bullet per figure with a bold TAM / SAM / SOM label"
+    },
+    {
+      "key": "traction",
+      "default_heading": "Key Milestones",
+      "purpose": "traction milestones",
+      "content": ["Completed milestones", "Validation or performance data", "Grants, awards, or non-dilutive funding", "Granted IP (no unpublished details)", "Commercial traction (actual vs prospective kept distinct)"],
+      "item_roles": ["general"],
+      "format": "bullets"
+    },
+    {
+      "key": "team",
+      "default_heading": "Leadership Team",
+      "purpose": "team names, titles, and credentials",
+      "content": ["Name", "Title", "Notable credentials"],
+      "item_roles": ["team_member"],
+      "format": "one bullet per person: **Name**, Title - credentials"
+    },
+    {
+      "key": "funding",
+      "default_heading": "Funding Ask & Use of Funds",
+      "purpose": "the funding ask and use of funds",
+      "content": ["Amount being raised and round (bold)", "High-level use of funds", "Runway or milestones the round funds"],
+      "item_roles": ["funding_ask", "use_of_funds", "general"],
+      "excluded_roles": ["committed_capital"],
+      "format": "tinted box with primary-colour left rule; funding ask bold",
+      "approval_required": "funding_ask"
+    }
+  ],
+
+  "industry_heading_variants": {
+    "biotech": {"pipeline_product": "Pipeline", "solution_technology": "Science & Platform", "traction": "Key Milestones"},
+    "medtech": {"pipeline_product": "Product Pipeline", "traction": "Clinical & Regulatory Milestones"},
+    "software": {"pipeline_product": "Product", "traction": "Traction"}
+  },
+
+  "footer": {
+    "disclaimer": "For informational purposes only. Does not constitute an offer to sell securities.",
+    "disclaimer_editable": false,
+    "disclaimer_style": "centered, italic, muted, above a thin rule",
+    "ten_capital_footer": {
+      "default_included": true,
+      "pattern": "[Document Title]   [PAGE#]   Compiled on [DATE] by TEN Capital Network   [TEN Capital Logo]",
+      "document_title": "[Company Name] Investor Teaser",
+      "font": "Open Sans 7 pt, centered",
+      "logo": "assets/TEN_Capital_logo_footer.png at 0.67 x 0.25 in"
+    }
+  },
+
+  "item_fields": [
+    {"key": "text", "description": "Concise teaser wording; facts only from cited pages"},
+    {"key": "section", "description": "One of the section keys above"},
+    {"key": "role", "description": "general | tam | sam | som | funding_ask | use_of_funds | committed_capital | team_member"},
+    {"key": "refs", "description": "List of {page, quote, verified}; shown in review only, never in the PDF"},
+    {"key": "claim_type", "description": "actual | forecast | planned | descriptive"},
+    {"key": "sensitive_category", "description": "Confidentiality category, if any"},
+    {"key": "include", "description": "Whether the item appears in the export"}
+  ],
+
+  "review_rules": {
+    "exclude_by_default": ["investor_identity", "committed_capital", "undisclosed_negotiation", "deal_terms", "proprietary_technical", "ip_strategy", "contact_details", "customer_identity"],
+    "approval_required": ["funding_ask", "confidential_marking", "unsupported", "figure_mismatch"],
+    "warnings": ["qualifier_drift", "conflict", "unclear", "embedded_instruction", "extraction"],
+    "missing_information": "Shown in review as 'Not found in the deck'; the section or field is omitted from the PDF."
+  }
+}
