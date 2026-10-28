@@ -62,6 +62,7 @@ class RenderOptions:
     ten_footer: bool = True
     include_logo: bool = False
     compiled_on: dt.date = field(default_factory=dt.date.today)
+    watermark: str | None = None  # e.g. "DRAFT — NOT FOR DISTRIBUTION" for internal copies
 
 
 @dataclass
@@ -383,6 +384,21 @@ def _draw_header(c: Canvas, draft: TeaserDraft, fonts: Fonts, options: RenderOpt
     return y - 10
 
 
+def _draw_watermark(c: Canvas, text: str, fonts: Fonts) -> None:
+    """Large, faint diagonal text drawn first, so all content sits on top of it."""
+    c.saveState()
+    c.setFillColor(HexColor("#C8102E"))
+    c.setFillAlpha(0.08)
+    c.translate(PAGE_W / 2, PAGE_H / 2)
+    c.rotate(35)
+    size = 40.0
+    while size > 20 and c.stringWidth(text, fonts.bold, size) > PAGE_H * 0.85:
+        size -= 1
+    c.setFont(fonts.bold, size)
+    c.drawCentredString(0, -size / 3, text)
+    c.restoreState()
+
+
 def _draw_footer(c: Canvas, draft: TeaserDraft, fonts: Fonts, options: RenderOptions) -> None:
     y = MARGIN_BOTTOM + (20 if options.ten_footer else 0)
     c.setStrokeColor(HexColor("#C9CDD2"))
@@ -428,7 +444,9 @@ def render_pdf(draft: TeaserDraft, options: RenderOptions | None = None) -> Rend
     name = draft.company_name.value.strip() or "Company"
     c.setTitle(f"{name} Investor Teaser")
     c.setAuthor(name)
-    c.setSubject("Investor teaser")
+    c.setSubject("Investor teaser (draft)" if options.watermark else "Investor teaser")
+    if options.watermark:
+        _draw_watermark(c, options.watermark, fonts)
     top = _draw_header(c, draft, fonts, options)
     bottom = MARGIN_BOTTOM + _footer_height(options)
     height = top - bottom

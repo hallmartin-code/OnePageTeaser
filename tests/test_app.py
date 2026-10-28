@@ -23,12 +23,17 @@ def _button(at: AppTest, label: str):  # type: ignore[no-untyped-def]
     return next(b for b in at.button if b.label.startswith(label))
 
 
-def _download_disabled(at: AppTest) -> bool:
-    # AppTest exposes download buttons as UnknownElement; read the proto's disabled flag.
-    for el in at.get("download_button"):
-        if "PDF" in el.proto.label:
-            return bool(el.proto.disabled)
-    raise AssertionError("no PDF download button rendered")
+def _downloads(at: AppTest) -> dict[str, bool]:
+    """Download buttons by label -> enabled. AppTest exposes them as UnknownElement protos."""
+    return {el.proto.label: not el.proto.disabled for el in at.get("download_button")}
+
+
+def _submit_enabled(at: AppTest) -> bool:
+    """The single approval button is a disabled st.button until export is allowed."""
+    if _downloads(at).get("Submit approval & download"):
+        return True
+    assert any(b.label == "Submit approval & download" and b.disabled for b in at.button)
+    return False
 
 
 def test_sample_deck_full_workflow(app: AppTest) -> None:
@@ -41,18 +46,24 @@ def test_sample_deck_full_workflow(app: AppTest) -> None:
     assert not app.exception
     assert app.session_state.draft is not None
 
-    # Download stays disabled until approvals and the final confirmation are given.
-    assert _download_disabled(app)
+    # Export is locked while flagged items are open; the watermarked draft is always available.
+    assert not _submit_enabled(app)
+    assert _downloads(app)["Download DRAFT PDF"]
     approvals = [c for c in app.checkbox if "approve" in c.label.lower()]
     assert approvals
     _button(app, "Approve all content drawn from confidential pages").click().run()
+    assert not _submit_enabled(app)  # the funding ask still needs its own approval
     for box in [c for c in app.checkbox if c.label.startswith("⛔") and "Funding ask" in c.label]:
         box.check()
     app.run()
-    assert _download_disabled(app)  # final human confirmation still missing
-    next(c for c in app.checkbox if c.label.startswith("I have read the full teaser")).check().run()
     assert not app.exception
-    assert not _download_disabled(app)
+    assert _submit_enabled(app)  # one button now submits the approval and downloads
+    assert any("✅ All flagged items approved" in m.value for m in app.markdown)
+
+    # Format choice changes what the button downloads.
+    fmt = next(r for r in app.radio if r.label == "Format")
+    fmt.set_value("All files (ZIP: PDF, DOCX, PNG, review record)").run()
+    assert _submit_enabled(app)
 
 
 def test_offline_mode_generates_and_shows_review_panel(app: AppTest) -> None:

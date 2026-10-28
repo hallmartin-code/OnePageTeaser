@@ -86,7 +86,7 @@ When `RESEND_API_KEY` is set, results are emailed automatically to `REPORT_EMAIL
 | Event | When | Attachment |
 |---|---|---|
 | Draft analysis | Each time a draft is generated | `<Company>_Investor_Teaser_DRAFT.pdf`, the teaser as drafted (included items only) |
-| Approved teaser | When a reviewer downloads the approved PDF | Final `.pdf` and `.docx` |
+| Approved teaser | When a reviewer clicks **Submit approval & download** | Final `.pdf` and `.docx` |
 
 Each email body shows:
 
@@ -168,13 +168,30 @@ Setting variables triggers a redeploy. The health check is `/_stcore/health`.
    Every edit is re-checked against the cited pages immediately.
 5. **Approve.** The review panel summarises confidentiality categories by page, plus
    accuracy issues, conflicts, missing sections, and open approvals.
-6. **Preview and download.** The page re-renders on every change. The PDF download is
-   enabled only when:
-   - every blocking flag on included content is approved or the item is excluded;
-   - the layout check passes;
-   - you confirm you have read the full teaser.
+6. **Preview and export.** The page re-renders on every change. A readiness checklist
+   shows what still blocks export:
+   - flagged items not yet approved or excluded;
+   - whether the content fits on one page;
+   - the layout check.
 
-   An editable DOCX is offered alongside the PDF.
+   Choose a format, then click **Submit approval & download**. That one click records the
+   reviewer's approval (and sends the approved-teaser email) and downloads the file.
+
+   | Format | Contents |
+   |---|---|
+   | PDF | The one-page distribution copy |
+   | Word (DOCX) | The same content, editable |
+   | PNG image | The page as an image (200 dpi), e.g. for emails or slides |
+   | ZIP | All of the above plus `<Company>_Investor_Teaser_review_record.json` |
+
+   The review record is the audit trail:
+   - every published statement with its source pages and quotes;
+   - every approval the reviewer gave;
+   - excluded items, by category and page only;
+   - data-quality warnings.
+
+   Before approval, **Internal draft** downloads a PDF watermarked *DRAFT — NOT FOR
+   DISTRIBUTION*. It holds included items only, for internal circulation.
 
 ---
 
@@ -299,7 +316,7 @@ confirmation.
 python -m pytest
 ```
 
-There are 101 tests:
+There are 106 tests:
 
 | File | Covers |
 |---|---|
@@ -311,7 +328,8 @@ There are 101 tests:
 | `test_providers.py` | Configuration errors, key never exposed, connection check, Anthropic request shape and stop reasons, OpenAI-compatible retry (fake clients, no network) |
 | `test_template.py` | Template validates, holds no company data, matches the Markdown spec and the code, and drives the prompt and section order |
 | `test_mailer.py` | Default recipient, payload shape and attachments, no sensitive text in emails, idempotency keys, headers, failures that never raise |
-| `test_app.py` | The Streamlit script end to end, headless (`AppTest`): sample deck → draft → approvals → download gating; draft emailed once per generation; sample runs not emailed by default |
+| `test_export.py` | Export refused while approvals are open; PDF/DOCX/PNG/ZIP contents; review record traceability without excluded text; watermarked draft; safe file names |
+| `test_app.py` | The Streamlit script end to end, headless (`AppTest`): sample deck → draft → approvals → single submit-and-download button unlocks; format choice; draft emailed once per generation; sample runs not emailed by default |
 
 ## Sample data
 
@@ -345,6 +363,7 @@ teaser/
   screening.py              deterministic confidentiality screen
   editing.py                flags, approvals, re-checks, export gating
   mailer.py                 Resend result emails (draft and approved teaser)
+  export.py                 export formats (PDF, DOCX, PNG, ZIP), review record, draft watermark
   brand.py                  brand colour detection
   render/                   ReportLab PDF (fitting, audit), DOCX export, fonts
 assets/                     Open Sans (SIL OFL), TEN Capital footer logo

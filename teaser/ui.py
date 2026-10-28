@@ -1,4 +1,4 @@
-"""TEN Capital "Deck Analyzer" look for the Streamlit app.
+"""TEN Capital "One Page Teaser" look for the Streamlit app.
 
 Colours and fonts for native widgets come from ``.streamlit/config.toml``. This module adds
 what a theme cannot express: the tri-colour ambient glow, the brand lockup, the hero card
@@ -139,7 +139,7 @@ def hero_intro(current_step: int) -> None:
         for i, name in enumerate(STEPS)
     )
     st.html(
-        '<div class="ten-eyebrow">Deck Analyzer</div>'
+        '<div class="ten-eyebrow">One Page Teaser</div>'
         '<div class="ten-h1"><span class="nw">Pitch Deck</span><span class="arrow">&rarr;</span>'
         '<span class="to">Investor One&#8209;Pager</span></div>'
         '<p class="ten-lede">Upload a pitch deck and get a polished single-page investor PDF, '

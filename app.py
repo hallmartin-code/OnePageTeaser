@@ -13,7 +13,7 @@ import uuid
 import streamlit as st
 from PIL import Image
 
-from teaser import mailer, ui
+from teaser import export, mailer, ui
 from teaser.config import PROJECT_ROOT, Settings, load_settings
 from teaser.editing import (
     add_item,
@@ -37,7 +37,6 @@ from teaser.extract.providers import check_connection
 from teaser.ingest import load_deck
 from teaser.ingest.ocr import ocr_available
 from teaser.render import RenderOptions, layout_audit, preview_png, render_pdf
-from teaser.render.docx_export import render_docx
 from teaser.schema import (
     EXCLUDE_BY_DEFAULT,
     SECTION_PURPOSE,
@@ -64,7 +63,7 @@ st.set_page_config(page_title="TEN Capital · Deck to One-Pager", page_icon=str(
 
 
 def _reset() -> None:
-    for key in ("deck", "draft", "deck_key", "password_needed", "sample", "email_status", "run_key", "run_info"):
+    for key in ("deck", "draft", "deck_key", "password_needed", "sample", "email_status", "run_key", "run_info", "approval"):
         st.session_state.pop(key, None)
 
 
@@ -494,7 +493,7 @@ def _email_status(event: mailer.Event) -> None:
 
 
 def export_step(draft: TeaserDraft, blockers: list[str], ten_footer: bool) -> None:
-    ui.section_title("Preview and download", "One page, US Letter. Download unlocks once everything is approved.")
+    ui.section_title("Preview and export", "One page, US Letter. Export unlocks once every flagged item is approved or excluded.")
     deck = st.session_state.deck
     b1, b2, b3 = st.columns([1, 1, 2])
     draft.brand.primary = b1.color_picker("Heading colour", value=draft.brand.primary)
@@ -531,35 +530,77 @@ def export_step(draft: TeaserDraft, blockers: list[str], ten_footer: bool) -> No
 
     report = result.report
     issues = layout_audit(result.pdf)
-    left, right = st.columns([3, 2])
+    left, right = st.columns([3, 2], gap="large")
     with left:
         st.image(preview_png(result.pdf, dpi=110), width="stretch")
     with right:
-        st.markdown(
-            f"- One page, US Letter ✓\n- Body text {report.body_size:g} pt\n"
-            f"- Tallest column uses {report.fill_ratio:.0%} of the available height\n"
-            f"- {report.words} words"
+        _export_panel(draft, blockers, issues, report, options)
+
+
+EXPORT_FORMATS = {
+    "PDF (distribution copy)": "pdf",
+    "Word (editable DOCX)": "docx",
+    "PNG image": "png",
+    "All files (ZIP: PDF, DOCX, PNG, review record)": "zip",
+}
+
+
+def _export_panel(draft: TeaserDraft, blockers: list[str], issues: list[str], report: object,
+                  options: RenderOptions) -> None:
+    """Readiness checklist, then one button that submits the approval and downloads."""
+    st.markdown("**Ready to export?**")
+    checks = [
+        (not blockers, "All flagged items approved or excluded" if not blockers
+         else f"{len(blockers)} flagged item(s) still need approval or exclusion (see the review panel)"),
+        (True, f"Fits on one US Letter page at {report.body_size:g} pt ({report.words} words)"),  # type: ignore[attr-defined]
+        (not issues, "Layout check passed: nothing clipped or overlapping" if not issues
+         else "Layout check found problems: " + "; ".join(issues)),
+    ]
+    for ok, text in checks:
+        st.markdown(f"{'✅' if ok else '⛔'} {text}")
+
+    ready = not blockers and not issues
+    choice = EXPORT_FORMATS[st.radio("Format", list(EXPORT_FORMATS), disabled=not ready)]
+    if ready:
+        source = export.SourceInfo(
+            deck_filename=st.session_state.deck.filename, page_count=st.session_state.deck.page_count,
+            unreadable_pages=st.session_state.deck.unreadable_pages, generated_by=draft.generated_by,
+            generated_at=getattr(st.session_state.get("run_info"), "timestamp", None),
         )
-        if issues:
-            st.error("Layout check found problems:\n\n" + "\n".join(f"- {i}" for i in issues))
+        bundle = export.build_bundle(draft, source, options)
+        files = bundle.files()
+        if choice == "zip":
+            data, name, mime = bundle.zip(), f"{bundle.stem}.zip", "application/zip"
         else:
-            st.caption("Layout check: no text outside margins and no overlapping text.")
-        confirmed = st.checkbox("I have read the full teaser above and confirm it is approved for distribution.")
-        ready = not blockers and not issues and confirmed
-        if blockers:
-            st.warning(f"{len(blockers)} item(s) need approval or exclusion before download (see the review panel).")
-        name = (draft.company_name.value or "teaser").strip().replace(" ", "_")
-        docx = render_docx(draft, options) if ready else None
-        st.download_button("Download PDF", result.pdf, file_name=f"{name}_Investor_Teaser.pdf",
-                           mime="application/pdf", type="primary", disabled=not ready, width="stretch",
-                           on_click=_email_final, args=(result.pdf, docx))
-        _email_status("final")
-        if ready:
-            st.download_button("Download editable DOCX", docx,
-                               file_name=f"{name}_Investor_Teaser.docx",
-                               mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                               width="stretch",
-                               help="Word controls DOCX layout; the PDF is the one-page distribution copy.")
+            name = f"{bundle.stem}.{choice}"
+            data, mime = files[name]
+        st.download_button(
+            "Submit approval & download", data, file_name=name, mime=mime, type="primary",
+            width="stretch", icon=":material/verified:", on_click=_submit_approval,
+            args=(bundle.pdf, bundle.docx, name),
+            help="Confirms you have read the full teaser and approve it for distribution, then downloads it.",
+        )
+        st.caption("By submitting, you confirm you have read the full teaser and approve it for distribution.")
+    else:
+        st.button("Submit approval & download", type="primary", width="stretch", disabled=True,
+                  icon=":material/verified:", key="submit-disabled")
+    approved = st.session_state.get("approval")
+    if approved:
+        st.success(f"Approved and downloaded {approved['file']} at {approved['at']:%H:%M} UTC.")
+    _email_status("final")
+
+    with st.expander("Internal draft (before approval)", icon=":material/draft:"):
+        st.caption("A watermarked PDF of the teaser as it stands, including items not yet approved. "
+                   "For internal review only; not for distribution.")
+        st.download_button("Download DRAFT PDF", export.draft_pdf(draft, options),
+                           file_name=f"{export.file_stem(draft, draft_copy=True)}.pdf", mime="application/pdf",
+                           width="stretch", icon=":material/download:")
+
+
+def _submit_approval(pdf: bytes, docx: bytes, filename: str) -> None:
+    """Runs when the reviewer clicks Submit approval & download: record it and email the result."""
+    st.session_state.approval = {"file": filename, "at": dt.datetime.now(dt.UTC)}
+    _email_final(pdf, docx)
 
 
 # --------------------------------------------------------------------------------------

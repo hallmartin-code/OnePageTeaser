@@ -10,7 +10,7 @@ maxUploadSize = 100
 # Serve static/ (favicon) at /app/static/.
 enableStaticServing = true
 
-# TEN Capital "Deck Analyzer" design: navy surfaces, coral primary, amber/teal accents.
+# TEN Capital "One Page Teaser" design: navy surfaces, coral primary, amber/teal accents.
 # Custom CSS for the hero card, gradient button, and glow lives in teaser/ui.py.
 [theme]
 base = "dark"
