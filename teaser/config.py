@@ -45,8 +45,6 @@ class Settings:
     timeout_s: float
     enable_ocr: bool
     ten_footer: bool
-    app_password: str | None = None
-    hosted: bool = False
     resend_api_key: str | None = None
     report_email_to: str = "Info@tencapital.group"
     report_email_from: str = "TEN Capital Investor Teaser <teaser@tencapital.group>"
@@ -61,11 +59,6 @@ class Settings:
     def email_recipients(self) -> list[str]:
         """REPORT_EMAIL_TO split on commas."""
         return [a.strip() for a in self.report_email_to.split(",") if a.strip()]
-
-    @property
-    def access_blocked(self) -> bool:
-        """A hosted deployment without a password would expose the API key's spend publicly."""
-        return self.hosted and not self.app_password
 
     @property
     def sends_externally(self) -> bool:
@@ -103,7 +96,6 @@ class Settings:
             "Model": self.model or "(not set)",
             "API key": "configured" if self.api_key else "not set",
             "OCR": "enabled" if self.enable_ocr else "disabled",
-            "Access": "password protected" if self.app_password else "open (local use)",
             "Result emails": f"to {', '.join(self.email_recipients)}" if self.email_enabled else "off",
         }
 
@@ -143,10 +135,6 @@ def load_settings(env_file: Path | None = None) -> Settings:
         timeout_s=timeout_s,
         enable_ocr=_flag("TEASER_ENABLE_OCR", True),
         ten_footer=_flag("TEASER_TEN_FOOTER", True),
-        app_password=os.environ.get("APP_PASSWORD") or None,
-        # Railway sets these in every deployment; TEASER_HOSTED forces the same behaviour elsewhere.
-        hosted=_flag("TEASER_HOSTED", False)
-        or any(os.environ.get(v) for v in ("RAILWAY_ENVIRONMENT", "RAILWAY_PROJECT_ID")),
         resend_api_key=(os.environ.get("RESEND_API_KEY") or "").strip() or None,
         report_email_to=os.environ.get("REPORT_EMAIL_TO", "").strip() or "Info@tencapital.group",
         report_email_from=os.environ.get("REPORT_EMAIL_FROM", "").strip()

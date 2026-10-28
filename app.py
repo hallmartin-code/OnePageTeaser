@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import datetime as dt
 import hashlib
-import hmac
 import io
 import uuid
 
@@ -566,31 +565,6 @@ def export_step(draft: TeaserDraft, blockers: list[str], ten_footer: bool) -> No
 # --------------------------------------------------------------------------------------
 
 
-def authorized(settings: Settings) -> bool:
-    """Password gate. Required on hosted deployments; optional locally (set APP_PASSWORD)."""
-    if settings.access_blocked:
-        st.error(
-            "This deployment has no APP_PASSWORD set. It is disabled so the public URL cannot "
-            "spend the configured API key or receive confidential decks. Set APP_PASSWORD in the "
-            "hosting environment's variables and redeploy."
-        )
-        return False
-    if not settings.app_password or st.session_state.get("authenticated"):
-        return True
-    with st.container(key="hero-login"):
-        st.html('<div class="ten-eyebrow">Deck Analyzer</div><div class="ten-h1">Sign in</div>'
-                '<p class="ten-lede">This tool is restricted to TEN Capital Network users.</p>')
-        with st.form("login", border=False):
-            password = st.text_input("Password", type="password")
-            submitted = st.form_submit_button("Sign in", type="primary", width="stretch")
-    if submitted:
-        if hmac.compare_digest(password.encode(), settings.app_password.encode()):
-            st.session_state.authenticated = True
-            st.rerun()
-        st.error("Incorrect password.")
-    return False
-
-
 def _current_step() -> int:
     """0 Upload, 1 Draft, 2 Review, 3 Export: drives the step strip in the hero card."""
     if "deck" not in st.session_state:
@@ -607,7 +581,7 @@ def main() -> None:
     _, center, _ = st.columns([1, 2.4, 1])
     with center:
         ui.brand()
-        if settings is None or not authorized(settings):
+        if settings is None:
             return
     enable_ocr, ten_footer = sidebar(settings)
     st.session_state.ten_footer = ten_footer

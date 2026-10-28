@@ -129,7 +129,6 @@ Then set these variables in the Railway dashboard (service → **Variables**), o
 | Variable | Value |
 |---|---|
 | `ANTHROPIC_API_KEY` | your Console key |
-| `APP_PASSWORD` | a strong password, shared only with users |
 | `TEASER_LLM_PROVIDER` | `anthropic` (the default) |
 | `RESEND_API_KEY` | your Resend key (enables result emails) |
 | `REPORT_EMAIL_TO` | optional; defaults to `Info@tencapital.group` |
@@ -139,9 +138,9 @@ Setting variables triggers a redeploy. The health check is `/_stcore/health`.
 
 **Security and operations:**
 
-- **Password required.** On Railway the app refuses to run without `APP_PASSWORD`, so a
-  public URL can't spend your API credits or receive decks from strangers. The password is
-  compared in constant time and is never displayed.
+- **Open access.** The app has no sign-in. Anyone with the URL can upload decks and run
+  model-backed drafts on your API key, and every draft they generate is emailed to
+  `REPORT_EMAIL_TO`. Share the URL only with intended users.
 - **Spend limits.** Set a monthly spend limit for the key in the Claude Console.
 - **Uploads stay in memory.** The container doesn't write uploads to disk, and a redeploy
   clears all sessions.
@@ -189,7 +188,6 @@ logged or shown; the sidebar only says whether a key is configured.
 | `TEASER_LLM_PROVIDER` | `anthropic` | `anthropic`, `openai` (any OpenAI-compatible endpoint), or `offline` |
 | `TEASER_LLM_MODEL` | `claude-opus-5-5` for anthropic | Model name; required for `openai` |
 | `ANTHROPIC_API_KEY` / `ANTHROPIC_BASE_URL` | | Anthropic credentials / endpoint |
-| `APP_PASSWORD` | | Web app password; required on Railway |
 | `RESEND_API_KEY` | | Enables result emails via Resend |
 | `REPORT_EMAIL_TO` | `Info@tencapital.group` | Comma-separated recipients |
 | `REPORT_EMAIL_FROM` | `TEN Capital Investor Teaser <teaser@tencapital.group>` | Sender; domain must be verified in Resend |
@@ -301,7 +299,7 @@ confirmation.
 python -m pytest
 ```
 
-There are 104 tests:
+There are 101 tests:
 
 | File | Covers |
 |---|---|
@@ -310,10 +308,10 @@ There are 104 tests:
 | `test_missing_information.py` | Missing sections and fields reported and omitted; missing company name blocks export; offline mode invents nothing |
 | `test_pdf_pagination.py` | Exactly one page; 9 pt floor; overflow refused rather than clipped; no truncation; Unicode; long headers; logo; overlap detection; DOCX |
 | `test_ingest.py` | PDF/PPTX references, table flattening, scanned and image-only pages, password PDFs, corrupt and unsupported files, `.ppt` without LibreOffice, extension spoofing |
-| `test_providers.py` | Configuration errors, key and password never exposed, hosted-without-password block, connection check, Anthropic request shape and stop reasons, OpenAI-compatible retry (fake clients, no network) |
+| `test_providers.py` | Configuration errors, key never exposed, connection check, Anthropic request shape and stop reasons, OpenAI-compatible retry (fake clients, no network) |
 | `test_template.py` | Template validates, holds no company data, matches the Markdown spec and the code, and drives the prompt and section order |
 | `test_mailer.py` | Default recipient, payload shape and attachments, no sensitive text in emails, idempotency keys, headers, failures that never raise |
-| `test_app.py` | The Streamlit script end to end, headless (`AppTest`): sample deck → draft → approvals → download gating; password gate; hosted deployment without a password refuses to run; draft emailed once per generation; sample runs not emailed by default |
+| `test_app.py` | The Streamlit script end to end, headless (`AppTest`): sample deck → draft → approvals → download gating; draft emailed once per generation; sample runs not emailed by default |
 
 ## Sample data
 

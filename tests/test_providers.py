@@ -111,15 +111,6 @@ def test_openai_compatible_retries_invalid_json(clean_env, monkeypatch, tmp_path
     assert len(calls) == 2 and calls[0]["response_format"] == {"type": "json_object"}
 
 
-def test_hosted_without_password_is_blocked(clean_env, monkeypatch, tmp_path) -> None:  # type: ignore[no-untyped-def]
-    monkeypatch.delenv("APP_PASSWORD", raising=False)
-    settings = _settings(monkeypatch, tmp_path, RAILWAY_ENVIRONMENT="production")
-    assert settings.hosted and settings.access_blocked
-    settings = _settings(monkeypatch, tmp_path, RAILWAY_ENVIRONMENT="production", APP_PASSWORD="s3cret")
-    assert not settings.access_blocked
-    assert "s3cret" not in json.dumps(settings.describe())
-
-
 def test_check_connection_uses_model_lookup_not_messages(clean_env, monkeypatch, tmp_path) -> None:  # type: ignore[no-untyped-def]
     import anthropic
 

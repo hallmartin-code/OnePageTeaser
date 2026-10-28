@@ -84,7 +84,7 @@ header[data-testid="stHeader"] {{ background: transparent; }}
 }}
 [data-testid="stFileUploaderDropzone"]:hover {{ border-color:{TEAL}; background: rgba(53,190,187,.05); }}
 
-/* gradient primary buttons (Generate, Download PDF, Sign in) */
+/* gradient primary buttons (Generate, Download PDF) */
 button[data-testid="stBaseButton-primary"], button[data-testid="stBaseButton-primaryFormSubmit"] {{
   background: linear-gradient(90deg, {CORAL} 0%, {CORAL_SOFT} 45%, {AMBER} 100%);
   color: #17130E; border: none; font-family:'Sora',sans-serif; font-weight:700; letter-spacing:.01em;

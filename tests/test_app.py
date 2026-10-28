@@ -64,30 +64,6 @@ def test_offline_mode_generates_and_shows_review_panel(app: AppTest) -> None:
     assert any("instructions to an AI system" in w.value for w in app.warning)
 
 
-def test_password_gate(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("TEASER_LLM_PROVIDER", "offline")
-    monkeypatch.setenv("APP_PASSWORD", "correct horse")
-    at = AppTest.from_file(APP, default_timeout=60)
-    at.run()
-    assert not any(b.label.startswith("Use synthetic") for b in at.button)  # nothing behind the gate
-    at.text_input[0].input("wrong")
-    at.button[0].click().run()
-    assert any("Incorrect password" in e.value for e in at.error)
-    at.text_input[0].input("correct horse")
-    at.button[0].click().run()
-    assert any(b.label.startswith("Use synthetic") for b in at.button)
-
-
-def test_hosted_deployment_without_password_refuses(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("TEASER_LLM_PROVIDER", "offline")
-    monkeypatch.setenv("RAILWAY_ENVIRONMENT", "production")
-    monkeypatch.delenv("APP_PASSWORD", raising=False)
-    at = AppTest.from_file(APP, default_timeout=60)
-    at.run()
-    assert any("APP_PASSWORD" in e.value for e in at.error)
-    assert not any(b.label.startswith("Use synthetic") for b in at.button)
-
-
 def _sent_emails(monkeypatch: pytest.MonkeyPatch) -> list[dict]:  # type: ignore[type-arg]
     from teaser import mailer
 
